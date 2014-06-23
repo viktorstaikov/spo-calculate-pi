@@ -55,11 +55,13 @@ func calcMember(k int64) *big.Rat {
 }
 
 func calcPi(from, to int64) *big.Rat {
+	log(fmt.Sprintf("...... calcPi STARTED from %v to %v\n", from, to))
 	pi := big.NewRat(0, 1)
 	for i := from; i < to; i++ {
 		member := calcMember(i)
 		pi = pi.Add(pi, member)
 	}
+	log(fmt.Sprintf("...... calcPi FINISHED from %v to %v\n", from, to))
 	return pi
 }
 
@@ -89,8 +91,9 @@ func main() {
 			ch <- pi
 		}(from, to)
 	}
-
 	for i := 0; i < tasks; i++ {
+
+		log(fmt.Sprintf("... waiting%v\n", i))
 		value := <-ch
 
 		sum.Add(sum, value)
